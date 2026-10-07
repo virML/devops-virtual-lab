@@ -1,0 +1,24 @@
+---
+- name: Configure VLE-5 DevOps Server
+  hosts: servers
+  become: yes
+
+  tasks:
+    - name: Install Docker
+      ansible.builtin.dnf:
+        name: docker
+        state: present
+
+    - name: Start Docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Verify Docker installation
+      ansible.builtin.command: docker --version
+      register: docker_version
+
+    - name: Display Docker version
+      ansible.builtin.debug:
+        var: docker_version.stdout
